@@ -37,6 +37,10 @@ public class GlobalExceptionHandler {
     // Manejo global para cualquier otro error no controlado (Código 500)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalException(Exception ex, WebRequest request) {
+
+        // ¡Agrega esta línea para que puedas ver el error real en tu consola!
+        ex.printStackTrace();
+
         ErrorDetails errorDetails = new ErrorDetails(
                 LocalDateTime.now(),
                 "Ocurrió un error interno en el servidor. Contacte a soporte.",
