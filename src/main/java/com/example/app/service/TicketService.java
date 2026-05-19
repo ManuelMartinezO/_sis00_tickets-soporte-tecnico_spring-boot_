@@ -2,6 +2,7 @@ package com.example.app.service;
 
 import com.example.app.dto.NotaDiagnosticoDTO;
 import com.example.app.dto.TicketDTO;
+import com.example.app.enums.EstadoTicket;
 import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.Cliente;
 import com.example.app.model.NotaDiagnostico;
@@ -53,5 +54,18 @@ public class TicketService {
         nota.setTicket(ticket); // Vinculamos la nota al ticket
 
         return notaRepository.save(nota);
+    }
+
+    // Nuevo método para cambiar el estado con validaciones de negocio
+    public Ticket cambiarEstado(Long id, EstadoTicket nuevoEstado) {
+        Ticket ticket = obtenerPorId(id);
+
+        // Regla de validación: No se puede finalizar sin notas
+        if (nuevoEstado == EstadoTicket.FINALIZADO && ticket.getNotas().isEmpty()) {
+            throw new IllegalArgumentException("No se puede cambiar el estado a FINALIZADO. El ticket no tiene notas de diagnóstico registradas.");
+        }
+
+        ticket.setEstado(nuevoEstado);
+        return ticketRepository.save(ticket);
     }
 }
