@@ -1,6 +1,8 @@
 package com.example.app.controller;
 
+import com.example.app.dto.NotaDiagnosticoDTO;
 import com.example.app.dto.TicketDTO;
+import com.example.app.model.NotaDiagnostico;
 import com.example.app.model.Ticket;
 import com.example.app.service.TicketService;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +28,21 @@ public class TicketController {
     public ResponseEntity<Ticket> registrarTicket(@RequestBody TicketDTO ticketDTO) {
         Ticket nuevoTicket = ticketService.crearTicket(ticketDTO);
         return new ResponseEntity<>(nuevoTicket, HttpStatus.CREATED);
+    }
+
+    // Endpoint para obtener un ticket y su historial de notas
+    @GetMapping("/{id}")
+    public ResponseEntity<Ticket> obtenerTicket(@PathVariable Long id) {
+        return ResponseEntity.ok(ticketService.obtenerPorId(id));
+    }
+
+    // Endpoint para agregar una nota a un ticket específico
+    @PostMapping("/{id}/notas")
+    public ResponseEntity<NotaDiagnostico> agregarNotaATicket(
+            @PathVariable Long id,
+            @RequestBody NotaDiagnosticoDTO notaDTO) {
+
+        NotaDiagnostico nuevaNota = ticketService.agregarNota(id, notaDTO);
+        return new ResponseEntity<>(nuevaNota, HttpStatus.CREATED);
     }
 }
