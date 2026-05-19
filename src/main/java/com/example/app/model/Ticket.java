@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tickets")
@@ -36,6 +38,11 @@ public class Ticket {
     @ManyToOne(optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
+
+    // Relación One-to-Many: Un ticket tiene muchas notas
+    // cascade = CascadeType.ALL: Si se borra el ticket, se borran sus notas
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NotaDiagnostico> notas = new ArrayList<>();
 
     // Método que se ejecuta automáticamente antes de insertar el registro en PostgreSQL
     @PrePersist
