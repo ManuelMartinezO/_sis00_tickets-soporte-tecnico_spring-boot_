@@ -1,5 +1,6 @@
 package com.example.app.controller;
 
+import com.example.app.dto.CambioEstadoDTO;
 import com.example.app.dto.NotaDiagnosticoDTO;
 import com.example.app.dto.TicketDTO;
 import com.example.app.model.NotaDiagnostico;
@@ -44,5 +45,15 @@ public class TicketController {
 
         NotaDiagnostico nuevaNota = ticketService.agregarNota(id, notaDTO);
         return new ResponseEntity<>(nuevaNota, HttpStatus.CREATED);
+    }
+
+    // Endpoint para actualizar únicamente el estado del ticket
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<Ticket> cambiarEstado(
+            @PathVariable Long id,
+            @RequestBody CambioEstadoDTO estadoDTO) {
+
+        Ticket ticketActualizado = ticketService.cambiarEstado(id, estadoDTO.getEstado());
+        return ResponseEntity.ok(ticketActualizado);
     }
 }
